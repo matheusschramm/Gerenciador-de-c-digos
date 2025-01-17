@@ -32,7 +32,7 @@
             display: none;
         }
         #barcodeInput {
-            width: 98%;
+            width: 100%;
             padding: 10px;
             font-size: 16px;
             margin-top: 10px;
@@ -44,6 +44,7 @@
     <input type="text" id="barcodeInput" maxlength="22" placeholder="Escaneie o código de barras aqui...">
     <div id="alert" class="alert">Código inválido ou duplicado!</div>
     <p>Total de peças lidas: <span id="counter">0</span></p>
+    <p>Último código duplicado: <span id="lastDuplicate">Nenhum</span></p>
     <table>
         <thead>
             <tr>
@@ -60,6 +61,7 @@
         const barcodeTable = document.getElementById('barcodeTable');
         const counter = document.getElementById('counter');
         const alertDiv = document.getElementById('alert');
+        const lastDuplicate = document.getElementById('lastDuplicate');
 
         let barcodes = [];
 
@@ -78,6 +80,7 @@
                 if (barcodes.includes(barcode)) {
                     alertDiv.textContent = 'Código duplicado!';
                     alertDiv.style.display = 'block';
+                    lastDuplicate.textContent = barcode;
                     setTimeout(() => alertDiv.style.display = 'none', 3000);
                 } else {
                     alertDiv.style.display = 'none';
