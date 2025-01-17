@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leitor de Códigos de Barras</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #ccc;
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #f4f4f4;
+        }
+        .alert {
+            color: white;
+            background-color: red;
+            font-weight: bold;
+            padding: 10px;
+            margin-top: 10px;
+            border-radius: 5px;
+            display: none;
+        }
+        #barcodeInput {
+            width: 98%;
+            padding: 10px;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Leitor de Códigos de Barras</h1>
+    <input type="text" id="barcodeInput" maxlength="22" placeholder="Escaneie o código de barras aqui...">
+    <div id="alert" class="alert">Código inválido ou duplicado!</div>
+    <p>Total de peças lidas: <span id="counter">0</span></p>
+    <table>
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Código de Barras</th>
+            </tr>
+        </thead>
+        <tbody id="barcodeTable">
+        </tbody>
+    </table>
+
+    <script>
+        const barcodeInput = document.getElementById('barcodeInput');
+        const barcodeTable = document.getElementById('barcodeTable');
+        const counter = document.getElementById('counter');
+        const alertDiv = document.getElementById('alert');
+
+        let barcodes = [];
+
+        barcodeInput.addEventListener('keypress', function(event) {
+            if (event.key === 'Enter') {
+                const barcode = barcodeInput.value.trim();
+                barcodeInput.value = '';
+
+                if (barcode.length !== 22) {
+                    alertDiv.textContent = 'Código inválido! Deve ter exatamente 22 caracteres.';
+                    alertDiv.style.display = 'block';
+                    setTimeout(() => alertDiv.style.display = 'none', 3000);
+                    return;
+                }
+
+                if (barcodes.includes(barcode)) {
+                    alertDiv.textContent = 'Código duplicado!';
+                    alertDiv.style.display = 'block';
+                    setTimeout(() => alertDiv.style.display = 'none', 3000);
+                } else {
+                    alertDiv.style.display = 'none';
+                    barcodes.push(barcode);
+                    const newRow = document.createElement('tr');
+                    newRow.innerHTML = `<td>${barcodes.length}</td><td>${barcode}</td>`;
+                    barcodeTable.appendChild(newRow);
+                    counter.textContent = barcodes.length;
+                }
+            }
+        });
+    </script>
+</body>
+</html>
